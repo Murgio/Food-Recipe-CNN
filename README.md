@@ -40,10 +40,10 @@ The process looks like this:
 
 This work deals with the problem of automated recognition of a photographed cooking dish and the subsequent output of the appropriate recipe. The distinction between the difficulty of the chosen problem and previous supervised classification problems is that there are large overlaps in food dishes, as dishes of different categories may look very similar only in terms of image information. The task is subdivided into smaller areas according to the motto *divide and conquer*: According to the current state, the largest German-language dataset of more than 300'000 recipes will be presented, with a newly developed method, according to the author's knowledge, presented by the combination of object recognition or cooking court recognition using Convolutional Neural Networks (short CNN) and the search of the nearest neighbor of the input image (Next-Neighbor Classification) in a record of over 400,000 images. This combination helps to find the correct recipe more likely, as the top-5 categories of the CNN are compared to the next-neighbor category.
 
-## DeepKoch
+## DeepChef
 
 <div align="center">
-  <img src="https://i.imgur.com/Kfq7AQH.png" width=50%><br><br>
+  <img src="https://i.imgur.com/kvrcpAy.png" width=50%><br><br>
 </div>
 
-The result is the product DeepKoch. The web application (coming soon) expects a meal picture as input. As a result, you get the associated recipes.
+The result is the product DeepChef. The web application (coming soon) expects a meal picture as input. As a result, you get the associated recipes.
