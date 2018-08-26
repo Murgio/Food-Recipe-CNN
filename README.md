@@ -43,7 +43,7 @@ This work deals with the problem of automated recognition of a photographed cook
 ## DeepChef
 
 <div align="center">
-  <img src="https://i.imgur.com/kvrcpAy.png" width=50%><br><br>
+  <img src="https://i.imgur.com/IkTHOG8.png" width=50%><br><br>
 </div>
 
 The result is the product DeepChef. The web application (coming soon) expects a meal picture as input. As a result, you get the associated recipes.
