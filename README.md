@@ -8,6 +8,8 @@
 
 ## Overview
 
+### Update: The Blog Article is now out. Visit [the turorial on Medium](https://medium.com/@Muriz.Serifovic/this-ai-is-hungry-b2a8655528be) for further information!
+
 Maturaarbeit 2018: This work makes usage of deep convolutional neural networks with Keras to classify images into 230 food categories and to output a matching recipe. The dataset contains >400'000 food images and >300'000 recipes from chefkoch.de.
 
 Hardly any other area affects human well-being to a similar extent as nutrition. Every day countless of food pictures are published by users on social networks; from the first home-made cake to the top Michelin dish, the joy of the world is shared with you in case a dish is successful. It is a fact that no matter how different you may be from each other, good food is appreciated by everyone. Advances in the classification or object recognition of individual cooking ingredients are sparse. The problem is that there are almost no public edited records available.
