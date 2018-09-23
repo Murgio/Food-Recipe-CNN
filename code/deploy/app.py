@@ -2,6 +2,7 @@ from __future__ import division, print_function
 # coding=utf-8
 import sys
 import os
+import time
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import numpy as np
 from datetime import datetime
@@ -18,7 +19,7 @@ from keras.models import Model, load_model
 from keras import metrics
 
 import tables
-import falconn
+import nmslib
 
 from flask import Flask, redirect, url_for, request, render_template, stream_with_context, Response, send_from_directory
 from werkzeug.utils import secure_filename
@@ -34,6 +35,7 @@ app = Flask(__name__)
 MODEL_PATH = 'models/inceptionv3_4_new_ohne_dpot_2.97270.hdf5'
 MODEL_VGG_PATH = 'models/weights.bestVGG16try9.hdf5'
 hdf5_PATH = 'models/vgg16_bottleneck_features.hdf5'
+bin_PATH = 'models/dense_index_optim_01.bin'
 CHEFKOCH_PATH = 'https://www.chefkoch.de/rezepte/'
 model_inc = None
 feat_extractor = None
@@ -43,19 +45,43 @@ features = hdf5_file.root.img_features
 images = hdf5_file.root.img_paths
 
 n = 403885
-d = 4096
+#n = 416791
 
-CONSIDER_N_IMAGES = 15
-
-p = falconn.get_default_parameters(n, d)
-t = falconn.LSHIndex(p)
-print('STARTING SETUP')
-t.setup(features[:])
-print('DONE SETUP')
-q = t.construct_query_object(num_probes=32)
+# Number of neighbors
+K = 18
+# Set index parameters
+# These are the most important ones
+M = 15
+efC = 100
+num_threads = 4
+index_time_params = {'M': M, 'indexThreadQty': num_threads, 'efConstruction': efC, 'post' : 0}
+space_name='l2'
+efS = 100
+query_time_params = {'efSearch': efS}
+index_ann = None
 
 with open('meta/classes_230.txt', 'r') as textfile:
-	categories = textfile.read().splitlines()
+    categories = textfile.read().splitlines()
+
+def init_ann_index(bin_PATH=bin_PATH):
+    global index_ann
+    # Intitialize the library, specify the space, the type of the vector and add data points 
+    index_ann = nmslib.init(method='hnsw', space=space_name, data_type=nmslib.DataType.DENSE_VECTOR)
+    # Re-load the index and re-run queries
+    index_ann.loadIndex(bin_PATH)
+    # Setting query-time parameters and querying
+    print('Setting query-time parameters', query_time_params)
+    index_ann.setQueryTimeParams(query_time_params)
+
+def create_ann_index(bin_PATH=bin_PATH, num_features):
+    global index_ann
+    # Intitialize the library, specify the space, the type of the vector and add data points 
+    index_ann = nmslib.init(method='hnsw', space=space_name, data_type=nmslib.DataType.DENSE_VECTOR) 
+    index_ann.addDataPointBatch(features[:num_features])
+    index_ann.createIndex(index_time_params, print_progress=True)
+    # Setting query-time parameters and querying
+    print('Setting query-time parameters', query_time_params)
+    index_ann.setQueryTimeParams(query_time_params)
 
 def top_10_accuracy(y_true, y_pred):
     return metrics.top_k_categorical_accuracy(y_true, y_pred, k=10)
@@ -110,8 +136,8 @@ def show_result_images(final_result):
     plt.setp(ax, xticks=[], yticks=[])
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
-def get_closest_images_fast(query_features, num_results=CONSIDER_N_IMAGES):
-    return q.find_k_nearest_neighbors(query_features, num_results)
+def get_closest_images_nmslib(query_features, num_results=K):
+    return index_ann.knnQuery(query_features, k = num_results)
     
 def get_concatenated_images(indexes, thumb_height):
     thumbs = []
@@ -138,7 +164,7 @@ def model_predict(img_path):
     query_image, x = get_image_vgg(img_path)
     query_features = feat_extractor.predict(x)[0]
     # do a query on a random image
-    idx_closest = get_closest_images_fast(query_features)
+    idx_closest, distances = get_closest_images_nmslib(query_features)
     #print(idx_closest)
     predicted_labels = [str(images[i]).split('/')[1] for i in idx_closest]
     predicted_ids = [[str(images[i]).split('-')[1], str(images[i]).split('-')[2].split('.')[0], images[i].decode("utf-8")] for i in idx_closest]
@@ -160,7 +186,7 @@ def model_predict(img_path):
     #plot_preds(img, probabilities, 15)
     pred_categories = []
 
-    for i, x in enumerate(np.argsort(-probabilities)[:CONSIDER_N_IMAGES]):
+    for i, x in enumerate(np.argsort(-probabilities)[:K]):
       confidence = -np.sort(-probabilities)[i]
       #print(categories[x], confidence)
       pred_categories.append([categories[x], confidence])
@@ -213,7 +239,7 @@ def streamed_response():
         logger.log(result_list, food_time)
         #result = ' '.join([str(i) for i in result])
         ids = [food_id[2] for food_id in result_list]
-        food = food_list_html(result_list=result_list[:5], online=False)
+        food = food_list_html(result_list=result_list[:7], online=False)
         return ''.join(map(str, food))
     #def upload():
     #        for i, id in enumerate(ids):
@@ -222,6 +248,7 @@ def streamed_response():
     return None
 
 if __name__ == '__main__':
+    create_ann_index(num_features=n-1)
     load_models(MODEL_PATH)
     app.run(host='0.0.0.0', port=5000, debug=False)
 

@@ -6,7 +6,7 @@ from copy import copy
 import pandas as pd
 
 CHEFKOCH_PATH = 'https://www.chefkoch.de/rezepte/'
-PLACEHOLDER = 'https://earlyfood.com/cartpage/food/food.png'
+PLACEHOLDER = 'https://i.imgur.com/UYTqJ28.gif'
 
 chefkoch_rezepte = pd.read_csv('meta/chefkoch.csv', index_col=False)
 
@@ -109,7 +109,7 @@ def generate_html(i, picture_url_big, picture_url_thumbnail, recipe_title, recip
     if online:
         parsed.select(".cont_img_back")[0].append(BeautifulSoup("<img src=\"" + str(picture_url_thumbnail) + "\"data-src=\"" +str(picture_url_big)+"\">", "html.parser"))
     else:
-        parsed.select(".cont_img_back")[0].append(BeautifulSoup("<img src=\"" + str(PLACEHOLDER) + "\"data-src=\"" +str(picture_url_big)+"\">", "html.parser"))
+        parsed.select(".cont_img_back")[0].append(BeautifulSoup("<img src=\"" + str(picture_url_big) + "\"data-src=\"" +str(picture_url_big)+"\">", "html.parser"))
         #parsed.select(".cont_img_back")[0].append(BeautifulSoup("<img src=\"{{url_for(\'custom_static\', filename=\'%s\')}}\">" % str(picture_url_thumbnail), "html.parser"))
     #for j, ingredient_amount in enumerate(ingredients_amount):
      #   table_body.append(BeautifulSoup("<tr><td>" + ingredient_amount
