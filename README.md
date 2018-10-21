@@ -8,7 +8,9 @@
 
 ## Overview
 
-### Update: The Blog Article is now out. Visit [the turorial on Medium](https://medium.com/@Muriz.Serifovic/this-ai-is-hungry-b2a8655528be) for further information!
+Update: The Blog Article is now out. Visit [this tutorial on Medium](https://medium.com/@Muriz.Serifovic/this-ai-is-hungry-b2a8655528be) for further information!
+
+### For example usage visit this Jupyter Notebook: [Core Algorithm](https://github.com/Murgio/Food-Recipe-CNN/blob/master/code/deploy/core_algo_tests.ipynb)
 
 Maturaarbeit 2018: This work makes usage of deep convolutional neural networks with Keras to classify images into 230 food categories and to output a matching recipe. The dataset contains >400'000 food images and >300'000 recipes from chefkoch.de.
 
@@ -21,22 +23,22 @@ The process looks like this:
   │   └── Clearing data  
   │   └── Data augmentation  
   
-2│── **Data Analyse und Visulation, Daten splitten (Train, Valid, Test)**  
+2│── **Data analysis and Visualization, Split data (Train, Valid, Test)**  
 
-3│── **Versuche mit ersten einfachen ML Modellen**  
+3│── **First attempts wiht simple ML models**  
   │   └── Nearest Neighbor classifier (kNN)  
   │   └── k-Means Clustering  
   │   └── Support Vector Machine   
   
-4│── **Transfer Learning: Training von pre-trained CNN (Convolutional Neural Network)**  
+4│── **Transfer Learning: Training pre-trained CNN (Convolutional Neural Network)**  
   │   └── AlexNet, VGG, ResNet, GoogLeNet  
   
-5│── **Training von eigenem CNN**  
+5│── **Training your own CNN**  
   │   └── Optimization  
   
-6│── **Ergebnisse visualisieren**  
+6│── **Visualize results**  
 
-7└── **Erstellen einer ~~Android~~ Web Applikation** (still open)
+7└── **Create a web application (DeepChef)** (work in progress)
 
 ## Abstract
 
