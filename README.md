@@ -25,7 +25,7 @@ The process looks like this:
   
 2│── **Data analysis and Visualization, Split data (Train, Valid, Test)**  
 
-3│── **First attempts wiht simple ML models**  
+3│── **First attempts with simple ML models**  
   │   └── Nearest Neighbor classifier (kNN)  
   │   └── k-Means Clustering  
   │   └── Support Vector Machine   
