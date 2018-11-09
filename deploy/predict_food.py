@@ -1,6 +1,5 @@
 # coding=utf-8
 import numpy as np
-
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.decomposition import IncrementalPCA
@@ -24,7 +23,6 @@ class PredictFood:
     """
 	def __init__(self, k):
 		self.k = k
-
 		# Neural networks
 		self.model_inc, self.feat_extractor = self._load_models('models/inceptionv3_4_new_ohne_dpot_2.97270.hdf5')
 
@@ -122,6 +120,7 @@ class PredictFood:
 						str(self.images[i]).split('-')[2].split('.')[0], 
 						self.images[i].decode("utf-8")] for i in idx_closest]
 
+		# Results only from Inception
 		pred_categories = []
 
 		for i, x in enumerate(np.argsort(-probabilities)[:self.k]):
@@ -149,7 +148,7 @@ class PredictFood:
 			i.insert(0, 0)
 			final_result_ann.append(i)
 
-		return final_result
+		return final_result, pred_categories, idx_closest, distances
 
 	def model_predict(self, query_img_path):
 		"""Returns the final food result."""
@@ -160,7 +159,10 @@ class PredictFood:
 
 		img, x = self.get_image_inc(query_img_path) # Preprocess query image for Inception
 		probabilities = self.model_inc.predict(x)[0] # Get Inception's category probabilities not sorted
-		final_result = self.weighting_neural_net_inputs(pca_query_features, probabilities) # Get final food result
 
-		return final_result
+		final_result, inc_result, idx_closest, distances = self.weighting_neural_net_inputs(pca_query_features, probabilities) # Get final food result
+		ann_result = {}
+		ann_result['ann_ids'] = idx_closest.tolist()
+		ann_result['distances'] = distances.tolist()
+		return final_result, inc_result, ann_result
 

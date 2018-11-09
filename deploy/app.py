@@ -1,14 +1,14 @@
 # coding=utf-8
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from datetime import datetime
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 from flask import Flask, redirect, url_for, request, render_template, stream_with_context, Response, send_from_directory
 from werkzeug.utils import secure_filename
 
 from predict_food import PredictFood
 from chefkoch_parser import ChefkochParser
-from log_food import *
+from log_food import LogFood
 #from gevent.wsgi import WSGIServer
 
 # Define a flask app
@@ -27,29 +27,41 @@ def index():
 @app.route('/predict', methods=['GET', 'POST'])
 def streamed_response():
     if request.method == 'POST':
+        logger.new_request()
         # Get the file from post request
         f = request.files['file']
 
         # Save the file to ./uploads
         basepath = os.path.dirname(__file__)
-        file_path = os.path.join(
-            basepath, 'uploads', secure_filename(f.filename))
+        file_path = os.path.join(basepath,
+                                'uploads',
+                                secure_filename(f.filename))
         f.save(file_path)
 
         # [['category', incep_confidence, recipe_id, image_index, image_path], [], ...]
         start = datetime.now()
-
-        result_list = predict_food_result.model_predict(file_path)
-
+        result_list, inc_result, ann_result = predict_food_result.model_predict(file_path)
         end = datetime.now()
-        print('FOUND THE FOOD')
         food_time = end-start
-        # max 1 second
-        print('TOOK ME: ', food_time.microseconds*(1/1000000))
-        log(result_list, food_time)
+        logger.new_calc_time(food_time.microseconds*(1/1000000)) # seconds
+
         parser.update_result_list(result_list[:7])
-        #result = ' '.join([str(i) for i in result])
+
+        # Log result food ids
+        food_ids = [food_id[2] for food_id in result_list]
+        logger.new_food_ids(food_ids)
+
+        # Log result food image indexes
+        image_indexes = [food_id[3] for food_id in result_list]
+        logger.new_image_indexes(image_indexes)
+
+        # Log inception result and ann results
+        inc_result = dict((pred[0], float(pred[1])) for pred in inc_result)
+        logger.new_inc_result(inc_result)
+        logger.new_ann_result(ann_result)
+
         food = parser.food_list_html()
+        logger.flush()
         return ''.join(map(str, food))
     #def upload():
     #        for i, id in enumerate(ids):
@@ -59,7 +71,8 @@ def streamed_response():
 
 if __name__ == '__main__':
     parser = ChefkochParser()
-    predict_food_result = PredictFood(k=18)
+    predict_food_result = PredictFood(k=15)
+    logger = LogFood(path='meta/log_food.json')
     app.run(host='0.0.0.0', port=5000, debug=False)
 
     # Serve the app with gevent
