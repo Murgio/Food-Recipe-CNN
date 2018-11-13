@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 from copy import copy
 import pandas as pd
+from random import choice
 
 class ChefkochParser:
     """Generate HTML from the food result list.
@@ -71,12 +72,11 @@ class ChefkochParser:
         print(food[2], end='-')
         food_info = self.chefkoch_rezepte.query('recipe_id in @food[2]')
         # TODO: What if dataframe is empty
-        if food_info.empty: 
+        if food_info.empty:
             return list(*zip())
         picture_url_big = self.json_links[str(food[2])][int(food[3])]
         picture_url_big = picture_url_big.replace('420x280-fix', '960x720')
-        picture_url_thumbnail = ''
-
+        picture_url_thumbnail = picture_url_big.replace('960x720', '420x280-fix')
         recipe_title = food_info['recipe_name'].iloc[0]
         recipe_decs = ''
         instructions = food_info['instructions'].iloc[0]
@@ -87,46 +87,20 @@ class ChefkochParser:
         return i, picture_url_big, picture_url_thumbnail, recipe_title, recipe_decs, ingredients_amount, ingredients_name, instructions, online
 
     def generate_html(self, i, picture_url_big, picture_url_thumbnail, recipe_title, recipe_decs, ingredients_amount, ingredients_name, instructions, online):
+        class_names = ['item item--large', 'item item--medium', 'item']
         contents = Path("template.html").read_text()
         parsed = BeautifulSoup(contents, 'html.parser')
-        instructions_div_container = parsed.select("#cont_text_det_preparation_div")[0]
-        instructions_div_element = parsed.select(".cont_text_det_preparation")[0]
+
+        # random size choice
+        class_name = choice(class_names)
+        # Card Size
+        card = parsed.find('div', class_='item')
+        card['class'] = class_name
+        card['style'] = "background-image: url('{}')".format(str(picture_url_thumbnail))
         # Title
-        parsed.select(".cont_detalles")[0].find('h3').insert(0, recipe_title)
-        # Desciption
-        parsed.select(".cont_detalles")[0].find('p').insert(0, recipe_decs)
-        # Instructions
-        schritte = ['SCHRITT '+str(n) for n in list(range(1, len(instructions)+1))]
+        card.select(".item__details")[0].insert(0, recipe_title)
         
-        # Merge every other sentence
-        if online is False:
-            instructions = instructions.split('.')
-            instructions = ['.'.join(x) for x in zip(instructions[0::2], instructions[1::2])]
-
-        for index, instruction in enumerate(instructions):
-            instruction_ = copy(instructions_div_element)
-            instruction_.findAll('p')[0].insert(0, schritte[index])
-            instruction_.findAll('p')[1].insert(0, instruction)
-            instructions_div_container.append(instruction_)
-
-        instructions_div_element.decompose()
-
-        # Don't show the expand button if there's no more than two instructions
-        if len(instructions) <= 2:
-            parsed.select(".cont_btn_mas_dets")[0].decompose()
-
-        if online:
-            parsed.select(".cont_img_back")[0].append(BeautifulSoup("<img src=\"" + str(picture_url_thumbnail) + "\"data-src=\"" +str(picture_url_big)+"\">", "html.parser"))
-        else:
-            parsed.select(".cont_img_back")[0].append(BeautifulSoup("<img src=\"" + str(picture_url_big) + "\"data-src=\"" +str(picture_url_big)+"\">", "html.parser"))
-            #parsed.select(".cont_img_back")[0].append(BeautifulSoup("<img src=\"{{url_for(\'custom_static\', filename=\'%s\')}}\">" % str(picture_url_thumbnail), "html.parser"))
-        #for j, ingredient_amount in enumerate(ingredients_amount):
-         #   table_body.append(BeautifulSoup("<tr><td>" + ingredient_amount
-          #                                  + "</td><td>" + ingredients_name[j] + "</td></tr>", "html.parser"))
-
-        #file = open(recipe_title + ".html", "w")
-        #file = open("templates/index.html", "w")
-        #file.write(parsed.prettify())
+        #card.append(BeautifulSoup("<img src=\"" + str(picture_url_big) + "\"data-src=\"" +str(picture_url_big)+"\">", "html.parser"))
         print(recipe_title)
         return parsed.prettify()
 
@@ -162,6 +136,9 @@ class ChefkochParser:
             return result
         else:
             for i, food in enumerate(self.result_list):
-                result.append(self.generate_html(*self.get_corresponding_recipes(i, food, online)))
+                try:
+                    result.append(self.generate_html(*self.get_corresponding_recipes(i, food, online)))
+                except:
+                    print('RECIPE NOT FOUND', food[2])
             return result
         return None

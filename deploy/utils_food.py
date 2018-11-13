@@ -4,25 +4,25 @@ import matplotlib.pyplot as plt
 from keras.preprocessing import image
 
 def plot_preds(image, probabilities, top_n, categories):
-	"""Plot the probabilities from the Inception network."""
-	plt.imshow(image)
-	plt.axis('off')
-	plt.figure()
+    """Plot the probabilities from the Inception network."""
+    plt.imshow(image)
+    plt.axis('off')
+    plt.figure()
 
-	order = list(reversed(range(top_n)))
-	labels = [categories[x] for i, x in enumerate(np.argsort(-probabilities)[:top_n])]
-	bar_preds = [-np.sort(-probabilities)[i] for i, x in enumerate(np.argsort(-probabilities)[:top_n])]
+    order = list(reversed(range(top_n)))
+    labels = [categories[x] for i, x in enumerate(np.argsort(-probabilities)[:top_n])]
+    bar_preds = [-np.sort(-probabilities)[i] for i, x in enumerate(np.argsort(-probabilities)[:top_n])]
 
-	plt.barh(order, bar_preds, alpha=0.8, color='g')
-	plt.title('the higher, the better', loc='center')
-	plt.yticks(order, labels, color='g')
-	plt.xlabel('Probability', color='g')
-	plt.xlim(0, 1.01)
-	plt.tight_layout()
-	plt.show()
+    plt.barh(order, bar_preds, alpha=0.8, color='g')
+    plt.title('the higher, the better', loc='center')
+    plt.yticks(order, labels, color='g')
+    plt.xlabel('Probability', color='g')
+    plt.xlim(0, 1.01)
+    plt.tight_layout()
+    plt.show()
 
 def plot_distances(distances, idx_closest, images):
-	"""Plot the distances from ANN.""" 
+    """Plot the distances from ANN.""" 
     order = list(range(len(distances)))[::-1] # just a list from 0 to self.k-1
     labels = [str(images[i]).split('/')[1] for i in idx_closest]
     
@@ -34,7 +34,7 @@ def plot_distances(distances, idx_closest, images):
     plt.show()
 
 def show_result_images(final_result):
-	"""Show only the images from the resulting food list."""
+    """Show only the images from the resulting food list."""
     rows = 2
     cols = 3
     fig, ax = plt.subplots(rows, cols, frameon=False, figsize=(12, 12))
@@ -55,7 +55,7 @@ def show_result_images(final_result):
 
 
 def get_concatenated_images(indexes, thumb_height):
-	"""Return a concated image of multiple food images from local disk."""
+    """Return a concated image of multiple food images from local disk."""
     thumbs = []
     for idx in indexes:
         img = image.load_img(images[idx])
