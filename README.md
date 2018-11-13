@@ -6,6 +6,9 @@
 
 # Deep Learning food image recognition system for cooking recipe retrieval
 
+## Demo: DeepChef
+<p align="center"><img alt="logo" src="output/deepchef_demo_v3.gif"></p>
+
 ## Overview
 
 Update: The Blog Article is now out. Visit [this tutorial on Medium](https://medium.com/@Muriz.Serifovic/this-ai-is-hungry-b2a8655528be) for further information!

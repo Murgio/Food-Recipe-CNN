@@ -1,26 +1,58 @@
-{% extends "base.html" %} {% block content %}
-
-<div>
-    <form id="upload-file" method="post" enctype="multipart/form-data">
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>DeepChef: Plan your meal like never before</title>
+        <META name="author" content="Muriz Serifovic">
+        <META name="copyright" content="&copy; 2018 Muriz Serifovic">
+        <META name="keywords" content="chef,recipes,food">
+        <META name="date" content="2018-11-13T20:49:37+00:00">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-beta.2/lazyload.js"></script>
+        <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+        <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    </head>
+    <!--<form id="upload-file" method="post" enctype="multipart/form-data">
         <label for="imageUpload" class="upload-label">
-            Choose...
+        Add Image
         </label>
         <input type="file" name="file" id="imageUpload" accept=".png, .jpg, .jpeg">
-    </form>
-
-    <div class="image-section" style="display:none;">
-        <div class="img-preview">
-            <div id="imagePreview">
+    </form>-->
+    <body>
+        <div class="message">
+            Sorry, your browser does not support this technology. 😅
+        </div>
+        <section class="section">
+            <h1>DeepChef</h1>
+            <div class="file-upload">
+                <div class="btn-wrapper">
+                    <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger('click')">Add Image</button>
+                </div>
+                <div class="image-upload-wrap">
+                    <input class="file-upload-input" onchange="$('.file-upload-input').trigger('click')" type='file' accept=".png, .jpg, .jpeg" />
+                    <div class="drag-text">
+                        <h3>Drag and drop an image</h3>
+                    </div>
+                </div>
+                <div class="file-upload-content">
+                    <img class="file-upload-image" src="#" alt="your image" />
+                    <div class="image-title-wrap">
+                        <button type="button" class="remove-image">
+                        <span class="image-title">Uploaded Image</span>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div>
-            <button type="button" class="btn btn-outline-success btn-lg " id="btn-predict">Find recipe!</button>
-        </div>
-    </div>
-
-    <div class="loader" style="display:none;"></div>
-
-    <div id="result"></div>
-</div>
-
-{% endblock %}
+            <span class="loader"><span class="loader-inner"></span></span>
+            <div class="grid">
+            </div>
+        </section>
+        <footer>
+            <p>
+                Crafted with <span style="color: #e25555;">&#9829;</span> in Switzerland
+            </p>
+            <script src="{{ url_for('static', filename='js/main.js') }}" type="text/javascript"></script>   
+        </footer>
+    </body>
+</html>
