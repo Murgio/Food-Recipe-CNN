@@ -7,7 +7,7 @@
 # Deep Learning food image recognition system for cooking recipe retrieval
 
 ## Demo: DeepChef
-<p align="center"><img alt="logo" src="output/deepchef_demo_v3.gif"></p>
+<p align="center"><img alt="logo" src="output/deepchef_demo_v4.gif"></p>
 
 ## Overview
 
