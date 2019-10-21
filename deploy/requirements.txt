@@ -71,7 +71,7 @@ more-itertools==2.2
 nbconvert==5.3.1
 nbformat==4.4.0
 neptune-cli==2.7.1
-nltk==3.2.5
+nltk==3.4.5
 notebook==5.4.0
 numexpr==2.6.4
 numpy==1.14.1
