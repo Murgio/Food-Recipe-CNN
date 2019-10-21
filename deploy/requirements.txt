@@ -148,5 +148,5 @@ voluptuous==0.9.3
 wcwidth==0.1.7
 webencodings==0.5.1
 websocket-client==0.35.0
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 widgetsnbextension==3.1.4
