@@ -37,7 +37,7 @@ greenlet==0.4.13
 h5py==2.7.1
 halo==0.0.11
 html5lib==1.0.1
-httplib2==0.10.3
+httplib2==0.18.0
 humanize==0.5.1
 idna==2.6
 ipykernel==4.8.2
