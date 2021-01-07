@@ -60,7 +60,7 @@ Keras==2.1.4
 kitchen==1.2.4
 lda==1.0.5
 log-symbols==0.0.12
-lxml==4.1.1
+lxml==4.6.2
 Markdown==2.6.11
 MarkupSafe==1.0
 matplotlib==2.1.2
