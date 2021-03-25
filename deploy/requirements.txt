@@ -108,7 +108,7 @@ pytest==3.4.1
 python-dateutil==2.4.2
 python-igraph==0.7.1.post6
 pytz==2018.3
-PyYAML==3.11
+PyYAML==5.4
 pyzmq==17.0.0
 qtconsole==4.3.1
 rasterfairy==1.0.3
