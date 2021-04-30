@@ -115,7 +115,7 @@ rasterfairy==1.0.3
 raven==6.1.0
 requests==2.11.1
 requests-oauthlib==0.8.0
-rsa==3.4.2
+rsa==4.7
 s3transfer==0.1.13
 scikit-learn==0.19.1
 scipy==1.0.0
