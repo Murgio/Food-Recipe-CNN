@@ -143,7 +143,7 @@ tornado==4.2
 tqdm==4.11.2
 traitlets==4.3.2
 uritemplate==3.0.0
-urllib3==1.16
+urllib3==1.26.5
 voluptuous==0.9.3
 wcwidth==0.1.7
 webencodings==0.5.1
