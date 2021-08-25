@@ -132,7 +132,7 @@ spinners==0.0.20
 statsmodels==0.8.0
 stop-words==2015.2.23.1
 tables==3.4.3
-tensorflow==1.5.0
+tensorflow==2.5.1
 tensorflow-tensorboard==1.5.1
 termcolor==1.1.0
 terminado==0.8.1
