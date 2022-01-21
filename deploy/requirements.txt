@@ -41,7 +41,7 @@ httplib2==0.10.3
 humanize==0.5.1
 idna==2.6
 ipykernel==4.8.2
-ipython==6.2.1
+ipython==7.16.3
 ipython-genutils==0.2.0
 ipywidgets==7.1.2
 itsdangerous==0.24
