@@ -99,7 +99,7 @@ pyasn1==0.4.2
 pyasn1-modules==0.2.1
 PyDrive==1.3.1
 Pygments==2.2.0
-PyJWT==1.5.2
+PyJWT==2.4.0
 pykwalify==1.5.2
 PyLaTeX==1.3.0
 pyLDAvis==2.1.1
